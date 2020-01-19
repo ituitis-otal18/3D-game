@@ -5,7 +5,8 @@ body {
 }
 
 h1 {
-    color: red;
+    font-family: 'Fascinate Inline', cursive;
+    color: #30d5c8;
     text-align: center;
 }
 
