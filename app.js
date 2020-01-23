@@ -1,3 +1,18 @@
+const WIDTH = window.innerWidth-200;
+const HEIGHT = window.innerHeight-150;
+
+//CAMERA
+var scene = new THREE.Scene();
+var camera = new THREE.PerspectiveCamera(75, WIDTH / HEIGHT, 0.1, 1000);
+camera.position.set(15, 15, 15);
+camera.lookAt(0, 0, 0);
+
+//RENDERER
+var renderer = new THREE.WebGLRenderer();
+renderer.setSize(WIDTH, HEIGHT);
+document.body.appendChild(renderer.domElement);
+
+//FPS
 (function(){
     var script=document.createElement('script');
     script.onload=function(){
@@ -12,26 +27,25 @@
     document.head.appendChild(script);
 })()
 
-const WIDTH = window.innerWidth-100;
-const HEIGHT = window.innerHeight-100;
-
-//CAMERA
-var scene = new THREE.Scene();
-var camera = new THREE.PerspectiveCamera(75, WIDTH / HEIGHT, 0.1, 1000);
-camera.position.set(15, 15, 15);
-camera.lookAt(0, 0, 0);
-
-//RENDERER
-var renderer = new THREE.WebGLRenderer();
-renderer.setSize(WIDTH, HEIGHT);
-document.body.appendChild(renderer.domElement);
-
 //CONTROLS
 controls = new THREE.OrbitControls(camera, renderer.domElement);
 
 //PLANE
 var plane = new THREE.GridHelper(100, 10);
 scene.add(plane);
+
+//SKYBOX
+var skyMaterials = [
+    new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load('./skybox/1.png'), side: THREE.DoubleSide}),
+    new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load('./skybox/2.png'), side: THREE.DoubleSide}),
+    new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load('./skybox/3.png'), side: THREE.DoubleSide}),
+    new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load('./skybox/4.png'), side: THREE.DoubleSide}),
+    new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load('./skybox/5.png'), side: THREE.DoubleSide}),
+    new THREE.MeshBasicMaterial({map: new THREE.TextureLoader().load('./skybox/6.png'), side: THREE.DoubleSide})
+];
+var skyGeometry = new THREE.BoxGeometry(1000, 1000, 1000);
+var sky = new THREE.Mesh(skyGeometry, skyMaterials);
+scene.add(sky);
 
 //LIGHT
 var light = new THREE.PointLight(0xFFFFFF, 4.0, 15);
@@ -67,9 +81,9 @@ function addCube(){
     var geometry = new THREE.BoxGeometry(1, 1, 1);
     //var material = new THREE.MeshFaceMaterial(cubeMaterials);
     var cube = new THREE.Mesh(geometry, cubeMaterials);
-    let X = Math.ceil(Math.random()*10) 
-    let Y = Math.ceil(Math.random()*10) 
-    let Z = Math.ceil(Math.random()*10)
+    let X = Math.ceil(Math.random()*20)-10 
+    let Y = Math.ceil(Math.random()*20)-10
+    let Z = Math.ceil(Math.random()*20)-10
     cube.position.set(X, Y, Z);
     scene.add(cube);
     cubes.push(cube);
@@ -122,4 +136,5 @@ function loop() {
 }
 
 baseLines();
+for (let i = 0; i < 10; i++) addCube();
 loop();
